@@ -1,0 +1,67 @@
+{% extends "django_messages/inbox.html" %}
+{% block content %}
+<h1 class="heading">Inbox</h1>
+{% if message_list %}
+<table class="messages table table-striped" id="messages-table">
+    <thead>
+        <tr><th>Sender</th><th>Subject</th><th>Received</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+{% for message in message_list %}
+    <tr id="tr-row-msg-{{message.id}}">
+        <td>{{ message.sender }}</td>
+        <td>
+            {% if message.new %}<strong>{% endif %}
+            {% if message.replied %}<em>{% endif %}
+            <a href="{{ message.get_absolute_url }}">{{ message.subject }}</a>
+            {% if message.replied %}</em>{% endif %}
+            {% if message.new %}</strong>{% endif %}</td>
+        <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+        <td class="text-center"><a data-href="{% url 'ajax_messages_delete' message.id %}" href="#myModal" data-toggle="modal" data-target="#confirm-delete" >delete</a></td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+    {% if is_paginated %}
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% else %}
+          <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+{% else %}
+<p>No messages.</p>
+{% endif %}
+
+<!-- Modal HTML -->
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                Are you sure? Do you want to delete message?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-cancel" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger btn-ok">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
