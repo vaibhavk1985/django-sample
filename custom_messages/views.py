@@ -1,13 +1,11 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DeleteView
+from django.views.generic import ListView
 from django_messages.models import Message
 # Create your views here.
 from django.views.generic import TemplateView
 import json
 from django.http import HttpResponse
 from django.utils import timezone
-from django.urls import reverse
-from django.contrib import messages
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
