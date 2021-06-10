@@ -1,5 +1,5 @@
 asgiref==3.2.3
-Django==2.1
+Django==2.2.24
 django-appconf==1.0.3
 django-mailer==2.0
 django-messages==0.6.0
